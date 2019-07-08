@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 2%;
+}
+table {
+  margin-top: 2%;
+}
+table, td, tr {
+  border: 1px solid; 
+  border-collapse: collapse;
+}
+td {
+  padding: 10px;
+}
+th {
+  border: 1px solid; 
+}
