@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bowlingScoresReceiver() {
       let name = [];
       let scores = [];
-      let scoresTemp = [];
+      let scoresTemporary = [];
 
       //make an input element to receive the file 
       let input = document.createElement('input'); 
@@ -28,26 +28,31 @@ document.addEventListener('DOMContentLoaded', function() {
             let text = event.target.result;
 
             // make new lines from text and put into temporary array
-            scoresTemp = text.split(/\n/);
-            scoresTemp.pop();
-            console.log(scoresTemp);
+            scoresTemporary = text.split(/\n/);
+
+            //check if last line is empty. If yes, parser deleting it.
+            if(scoresTemporary[scoresTemporary.length-1].length === 0) {
+              scoresTemporary.pop();
+
+            }
+            console.log(scoresTemporary);
 
             //segregate datas for names and scores 
-            for(let i=0; i<scoresTemp.length; i++) {
+            for(let i=0; i<scoresTemporary.length; i++) {
               if(i % 2 == 0) {
-                name.push(scoresTemp[i]);
+                name.push(scoresTemporary[i]);
               } else {
-                scores.push(scoresTemp[i]);
+                scores.push(scoresTemporary[i]);
               }
             }
-            scoresTemp.length = 0;
+            scoresTemporary.length = 0;
 
             //save scores as 3 nested arrays inside scores array
             scores.forEach(el => {
-              scoresTemp.push(el.split(', '));
+              scoresTemporary.push(el.split(', '));
             })
             scores.length = 0;
-            scores = scoresTemp;
+            scores = scoresTemporary;
           
             drawTable();
             // creates a table element
