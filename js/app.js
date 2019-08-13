@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
               scoresTemporary.pop();
 
             }
-            console.log(scoresTemporary);
 
             //segregate datas for names and scores 
             for(let i=0; i<scoresTemporary.length; i++) {
@@ -74,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 thead.appendChild(cell);
               }
               table.appendChild(thead);
-
+              let temporaryArray = [];
               // creating rows with content
               for (let i = 0; i < name.length; i++) {
                 let row = document.createElement('tr');
@@ -82,7 +81,64 @@ document.addEventListener('DOMContentLoaded', function() {
                 cellName.innerHTML = name[i];
                 row.appendChild(cellName);
                 cellName = document.createElement('td');
-                cellName.innerHTML = scores[i].reduce(function (a, b) { return parseFloat(a)+parseFloat(b) });
+                
+                for(let j=0; j<scores[i].length; j++) { //iterate throw each array to the end
+                  
+                  if(parseFloat(scores[i][j]) === 10) { //if parser find 10 value
+                    if (scores[i][j+2] === undefined) { //if parser find 10 value and thi is not closer than 2 positions from the end
+                      temporaryArray.push(parseFloat(scores[i][j]));
+                      temporaryArray.push(parseFloat(scores[i][j+1]));
+                      j++;
+                    } else if (scores[i][j+1] === undefined) { //if parser find 10 value and thi is not closer than 1 positions from the end
+                      temporaryArray.push(parseFloat(scores[i][j]));
+                      j++;
+                    } else {
+                      let temp = parseFloat(scores[i][j]) + parseFloat(scores[i][j+1]) + parseFloat(scores[i][j+2]);
+                      temporaryArray.push(temp);
+                    }
+                    
+
+                  } else if (parseFloat(scores[i][j-1]) === 10 && parseFloat(scores[i][j]) !== 10) { //if next element after 10 value is not 10 value 
+                    for(let k=j; k<scores[i].length; k++) { //new loop started from actual position of first loop 
+                      if ((parseFloat(scores[i][k]) + parseFloat(scores[i][k+1])) === 10) { 
+                        j++; //iterate j variable from main loop to stop all loops when program finish array
+                        if (scores[i][k+3] === undefined) {
+                          
+                          let temp = parseFloat(scores[i][k]) + parseFloat(scores[i][k+1]);
+                          temporaryArray.push(temp);
+                          j++, k++;
+                        } else {
+                          let temp = parseFloat(scores[i][k]) + parseFloat(scores[i][k+1]) + parseFloat(scores[i][k+2]);
+                          temporaryArray.push(temp);
+                          j++, k++;
+                        }
+                      } else {
+                        temporaryArray.push(parseFloat(scores[i][k]));
+                        j++;
+                      } 
+                    } 
+
+                    
+                   
+                  } else if ((parseFloat(scores[i][j]) + parseFloat(scores[i][j+1])) === 10 &&  j%2 === 0) { //if sum of two throws from one round is equal 10
+                    if (scores[i][j+3] === undefined) {
+                      let temp = parseFloat(scores[i][j]) + parseFloat(scores[i][j+1]);
+                      temporaryArray.push(temp);
+                      j++;
+                    } else {
+                      let temp = parseFloat(scores[i][j]) + parseFloat(scores[i][j+1]) + parseFloat(scores[i][j+2]);
+                      temporaryArray.push(temp);
+                      j++;
+                    }
+                    
+                  } else { //other case, just enter value to sum
+                    temporaryArray.push(parseFloat(scores[i][j]));
+                  }  
+                  
+                }
+
+                cellName.innerHTML = temporaryArray.reduce(function (a, b) { return parseFloat(a)+parseFloat(b) });
+                temporaryArray.length = 0;
                 row.appendChild(cellName);
 
                 // create cells in row with content
